@@ -6,7 +6,20 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		280F2D072DB4D14F003E2E39 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 280F2D062DB4D14F003E2E39 /* WidgetKit.framework */; };
+		280F2D092DB4D14F003E2E39 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 280F2D082DB4D14F003E2E39 /* SwiftUI.framework */; };
+		280F2D1A2DB4D150003E2E39 /* widgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 280F2D042DB4D14F003E2E39 /* widgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
+		280F2D182DB4D150003E2E39 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 285AF3DB2DA58C2700E1A5FF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 280F2D032DB4D14F003E2E39;
+			remoteInfo = widgetExtension;
+		};
 		285AF3F42DA58C2800E1A5FF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 285AF3DB2DA58C2700E1A5FF /* Project object */;
@@ -23,15 +36,80 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		280F2D1F2DB4D150003E2E39 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				280F2D1A2DB4D150003E2E39 /* widgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		280F2D042DB4D14F003E2E39 /* widgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = widgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		280F2D062DB4D14F003E2E39 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		280F2D082DB4D14F003E2E39 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		285AF3E32DA58C2700E1A5FF /* commute.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = commute.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		285AF3F32DA58C2800E1A5FF /* commuteTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = commuteTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		285AF3FD2DA58C2800E1A5FF /* commuteUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = commuteUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		280F2CFF2DB4CE85003E2E39 /* Exceptions for "commute" folder in "commute" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 285AF3E22DA58C2700E1A5FF /* commute */;
+		};
+		280F2D1E2DB4D150003E2E39 /* Exceptions for "widget" folder in "widgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 280F2D032DB4D14F003E2E39 /* widgetExtension */;
+		};
+		280F2D2B2DB55BD8003E2E39 /* Exceptions for "widget" folder in "commute" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				CommuteQuickStartWidget.swift,
+				widgetAttributes.swift,
+			);
+			target = 285AF3E22DA58C2700E1A5FF /* commute */;
+		};
+		280F2D4E2DB57629003E2E39 /* Exceptions for "commute" folder in "widgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Manager/CrossingStore.swift,
+				Model/Crossing.swift,
+				StartCommuteIntent.swift,
+				widgetController.swift,
+			);
+			target = 280F2D032DB4D14F003E2E39 /* widgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		280F2D0A2DB4D14F003E2E39 /* widget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				280F2D2B2DB55BD8003E2E39 /* Exceptions for "widget" folder in "commute" target */,
+				280F2D1E2DB4D150003E2E39 /* Exceptions for "widget" folder in "widgetExtension" target */,
+			);
+			path = widget;
+			sourceTree = "<group>";
+		};
 		285AF3E52DA58C2700E1A5FF /* commute */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				280F2CFF2DB4CE85003E2E39 /* Exceptions for "commute" folder in "commute" target */,
+				280F2D4E2DB57629003E2E39 /* Exceptions for "commute" folder in "widgetExtension" target */,
+			);
 			path = commute;
 			sourceTree = "<group>";
 		};
@@ -48,6 +126,15 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		280F2D012DB4D14F003E2E39 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				280F2D092DB4D14F003E2E39 /* SwiftUI.framework in Frameworks */,
+				280F2D072DB4D14F003E2E39 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		285AF3E02DA58C2700E1A5FF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -72,12 +159,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		280F2D052DB4D14F003E2E39 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				280F2D062DB4D14F003E2E39 /* WidgetKit.framework */,
+				280F2D082DB4D14F003E2E39 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		285AF3DA2DA58C2700E1A5FF = {
 			isa = PBXGroup;
 			children = (
 				285AF3E52DA58C2700E1A5FF /* commute */,
 				285AF3F62DA58C2800E1A5FF /* commuteTests */,
 				285AF4002DA58C2800E1A5FF /* commuteUITests */,
+				280F2D0A2DB4D14F003E2E39 /* widget */,
+				280F2D052DB4D14F003E2E39 /* Frameworks */,
 				285AF3E42DA58C2700E1A5FF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -88,6 +186,7 @@
 				285AF3E32DA58C2700E1A5FF /* commute.app */,
 				285AF3F32DA58C2800E1A5FF /* commuteTests.xctest */,
 				285AF3FD2DA58C2800E1A5FF /* commuteUITests.xctest */,
+				280F2D042DB4D14F003E2E39 /* widgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,6 +194,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		280F2D032DB4D14F003E2E39 /* widgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 280F2D1B2DB4D150003E2E39 /* Build configuration list for PBXNativeTarget "widgetExtension" */;
+			buildPhases = (
+				280F2D002DB4D14F003E2E39 /* Sources */,
+				280F2D012DB4D14F003E2E39 /* Frameworks */,
+				280F2D022DB4D14F003E2E39 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				280F2D0A2DB4D14F003E2E39 /* widget */,
+			);
+			name = widgetExtension;
+			packageProductDependencies = (
+			);
+			productName = widgetExtension;
+			productReference = 280F2D042DB4D14F003E2E39 /* widgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		285AF3E22DA58C2700E1A5FF /* commute */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 285AF4072DA58C2800E1A5FF /* Build configuration list for PBXNativeTarget "commute" */;
@@ -102,10 +223,12 @@
 				285AF3DF2DA58C2700E1A5FF /* Sources */,
 				285AF3E02DA58C2700E1A5FF /* Frameworks */,
 				285AF3E12DA58C2700E1A5FF /* Resources */,
+				280F2D1F2DB4D150003E2E39 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				280F2D192DB4D150003E2E39 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				285AF3E52DA58C2700E1A5FF /* commute */,
@@ -173,6 +296,9 @@
 				LastSwiftUpdateCheck = 1630;
 				LastUpgradeCheck = 1630;
 				TargetAttributes = {
+					280F2D032DB4D14F003E2E39 = {
+						CreatedOnToolsVersion = 16.3;
+					};
 					285AF3E22DA58C2700E1A5FF = {
 						CreatedOnToolsVersion = 16.3;
 					};
@@ -203,11 +329,19 @@
 				285AF3E22DA58C2700E1A5FF /* commute */,
 				285AF3F22DA58C2800E1A5FF /* commuteTests */,
 				285AF3FC2DA58C2800E1A5FF /* commuteUITests */,
+				280F2D032DB4D14F003E2E39 /* widgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		280F2D022DB4D14F003E2E39 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		285AF3E12DA58C2700E1A5FF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -232,6 +366,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		280F2D002DB4D14F003E2E39 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		285AF3DF2DA58C2700E1A5FF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -256,6 +397,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		280F2D192DB4D150003E2E39 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 280F2D032DB4D14F003E2E39 /* widgetExtension */;
+			targetProxy = 280F2D182DB4D150003E2E39 /* PBXContainerItemProxy */;
+		};
 		285AF3F52DA58C2800E1A5FF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 285AF3E22DA58C2700E1A5FF /* commute */;
@@ -269,6 +415,69 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		280F2D1C2DB4D150003E2E39 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YWZ8Q2Q4Z8;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = widget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = widget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
+				INFOPLIST_KEY_NSSupportsLiveActivitiesFrequentUpdates = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = tech.aremac.commute.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		280F2D1D2DB4D150003E2E39 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YWZ8Q2Q4Z8;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = widget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = widget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
+				INFOPLIST_KEY_NSSupportsLiveActivitiesFrequentUpdates = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = tech.aremac.commute.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		285AF4052DA58C2800E1A5FF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -397,6 +606,14 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = commute/Info.plist;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Commute uses Bluetooth to detect when your phone is connected to your car and optimise background updates.";
+				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Commute uses Bluetooth to detect when your phone is connected to your car and optimise background updates.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Commute tracks your locationâ€”even in the backgroundâ€”so we can warn you before you reach a rail crossing or drawbridge.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location while the app is open to show nearby crossings and avoid delays.";
+				INFOPLIST_KEY_NSMotionUsageDescription = "Motion data helps us determine whether youâ€™re driving, walking, or cycling so we donâ€™t spam you with updates.\n";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
+				INFOPLIST_KEY_NSSupportsLiveActivitiesFrequentUpdates = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -436,6 +653,14 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = commute/Info.plist;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Commute uses Bluetooth to detect when your phone is connected to your car and optimise background updates.";
+				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Commute uses Bluetooth to detect when your phone is connected to your car and optimise background updates.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Commute tracks your locationâ€”even in the backgroundâ€”so we can warn you before you reach a rail crossing or drawbridge.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location while the app is open to show nearby crossings and avoid delays.";
+				INFOPLIST_KEY_NSMotionUsageDescription = "Motion data helps us determine whether youâ€™re driving, walking, or cycling so we donâ€™t spam you with updates.\n";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
+				INFOPLIST_KEY_NSSupportsLiveActivitiesFrequentUpdates = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -556,6 +781,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		280F2D1B2DB4D150003E2E39 /* Build configuration list for PBXNativeTarget "widgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				280F2D1C2DB4D150003E2E39 /* Debug */,
+				280F2D1D2DB4D150003E2E39 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		285AF3DE2DA58C2700E1A5FF /* Build configuration list for PBXProject "commute" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

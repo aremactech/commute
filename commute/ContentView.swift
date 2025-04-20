@@ -9,58 +9,58 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @Environment(\.modelContext) private var ctx
+    @Query private var crossings: [Crossing]
+    @State private var newName = ""
+
+    @StateObject private var watcher = CrossingWatcher.shared
 
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
+        NavigationStack {
+            VStack(spacing: 24) {
+                Text(watcher.statusText)
+                    .font(.headline)
+                    .padding()
+
+                List {
+                    ForEach(crossings) { c in
+                        HStack {
+                            Text(c.name)
+                            Spacer()
+                            Text(c.lastStatus).font(.caption)
+                        }
+                    }
+                    .onDelete { idx in
+                        idx.forEach { ctx.delete(crossings[$0]) }
+                    }
+                }
+                .listStyle(.insetGrouped)
+                .scrollContentBackground(.hidden)
+
+                HStack {
+                    TextField("Add crossing name…", text: $newName)
+                    Button {
+                        addDemoCrossing()
                     } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+                        Label("Add", systemImage: "plus.circle.fill")
+                            .labelStyle(.titleAndIcon)
                     }
+                    .disabled(newName.isEmpty)
                 }
-                .onDelete(perform: deleteItems)
+                .textFieldStyle(.roundedBorder)
+                .padding()
             }
-#if os(macOS)
-            .navigationSplitViewColumnWidth(min: 180, ideal: 200)
-#endif
-            .toolbar {
-#if os(iOS)
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-#endif
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-        } detail: {
-            Text("Select an item")
+            .navigationTitle("Commute")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar { EditButton() }
         }
     }
 
-    private func addItem() {
+    private func addDemoCrossing() {
         withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
+            let demo = Crossing(name: newName, lat: 26.1224, lon: -80.1373) // Fort Laud example
+            ctx.insert(demo)
+            newName = ""
         }
     }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
-            }
-        }
-    }
-}
-
-#Preview {
-    ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
 }
