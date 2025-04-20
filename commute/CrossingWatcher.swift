@@ -52,7 +52,9 @@ final class CrossingWatcher: NSObject, ObservableObject, CLLocationManagerDelega
                                       longitude: dto.location.longitude)
 
             let etaMin = Int(here.distance(from: dtoCoord) / 15.0)        // 15 m/s ≈ 34 mph
-            let summary = "⏱️ \(dto.name) in \(etaMin) min – \(dto.status.capitalized)"
+            // CrossingStatus is an enum; use its rawValue text
+            let statusText = (dto.status as? (any RawRepresentable))?.rawValue as? String ?? "\(dto.status)"
+            let summary = "⏱️ \(dto.name) in \(etaMin) min – \(statusText.capitalized)"
 
             await MainActor.run {
                 currentSummary = summary
