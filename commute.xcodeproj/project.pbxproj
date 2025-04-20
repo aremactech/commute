@@ -87,6 +87,7 @@
 			membershipExceptions = (
 				Manager/CrossingStore.swift,
 				Model/Crossing.swift,
+				Network/CommuteAPI.swift,
 				StartCommuteIntent.swift,
 				widgetController.swift,
 			);

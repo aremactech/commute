@@ -2,81 +2,92 @@
 //  CrossingWatcher.swift
 //  commute
 //
-//  Created by Drew Goldstein on 4/20/25.
+//  Created by Drew Goldstein on 4/20/25.
 //
 
-// File: CrossingWatcher.swift   (iOS app target)
 import Foundation
 import CoreLocation
 import Combine
-import SwiftData
 import ActivityKit
 
 @MainActor
 final class CrossingWatcher: NSObject, ObservableObject, CLLocationManagerDelegate {
 
     static let shared = CrossingWatcher()
-    @Published var statusText = "…"
 
-    private let loc  = CLLocationManager()
-    private let car  = CarConnectionMonitor()
-    private let store: ModelContainer
-    private var cancellables = Set<AnyCancellable>()
+    // Published summary for UI / widgets
+    @Published var currentSummary: String = "Locating…"
 
-    private let triRailURL = URL(string: "https://gtfsr.tri-rail.com/TripUpdate.pb")!
-    private let bridgeURL  = URL(string: "https://api.fl511.com/drawbridges?ids=123")!
-
-    private var currentActivity: Activity<widgetAttributes>?     // ⬅ use widgetAttributes
+    private let loc = CLLocationManager()
+    private var pollTimer: AnyCancellable?
+    private var currentActivity: Activity<widgetAttributes>?
 
     private override init() {
-        store = try! ModelContainer(for: Crossing.self)
         super.init()
         loc.delegate = self
         loc.requestAlwaysAuthorization()
         loc.desiredAccuracy = kCLLocationAccuracyBest
         loc.startUpdatingLocation()
 
-        car.$inCar
-            .sink { [weak self] _ in self?.evaluateNow() }
-            .store(in: &cancellables)
+        // Poll new API every 30 s while app is foreground
+        pollTimer = Timer.publish(every: 30, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in self?.updateStatus() }
     }
 
-    func locationManager(_ m: CLLocationManager, didUpdateLocations _: [CLLocation]) {
-        evaluateNow()
+    // CLLocation delegate
+    func locationManager(_: CLLocationManager, didUpdateLocations _: [CLLocation]) {
+        updateStatus()
     }
 
-    private func evaluateNow() {
-        guard car.inCar, let here = loc.location else { return }
-        Task { await computeIfNeeded(from: here) }
+    // MARK: - Core logic
+    private func updateStatus() {
+        guard let here = loc.location else { return }
+
+        Task {
+            guard let dto = try? await nearestCrossing(to: here) else { return }
+
+            // Convert API location to CoreLocation
+            let dtoCoord = CLLocation(latitude: dto.location.latitude,
+                                      longitude: dto.location.longitude)
+
+            let etaMin = Int(here.distance(from: dtoCoord) / 15.0)        // 15 m/s ≈ 34 mph
+            let summary = "⏱️ \(dto.name) in \(etaMin) min – \(dto.status.capitalized)"
+
+            await MainActor.run {
+                currentSummary = summary
+                try? publishLiveActivity(name: dto.name, eta: etaMin, summary: summary)
+            }
+        }
     }
 
-    private func nearest(from pos: CLLocation) -> Crossing? {
-        let all = (try? store.mainContext.fetch(FetchDescriptor<Crossing>())) ?? []
-        return all.min { pos.distance(from: $0.location) < pos.distance(from: $1.location) }
+    private func nearestCrossing(to pos: CLLocation) async throws -> CommuteAPI.CrossingDTO? {
+        let list = try await CommuteAPI.fetchCrossings()
+        return list.min {
+            let a = CLLocation(latitude: $0.location.latitude, longitude: $0.location.longitude)
+            let b = CLLocation(latitude: $1.location.latitude, longitude: $1.location.longitude)
+            return pos.distance(from: a) < pos.distance(from: b)
+        }
     }
 
-    private func computeIfNeeded(from pos: CLLocation) async {
-        guard let cross = nearest(from: pos),
-              pos.distance(from: cross.location) < 1_600 else { return }
-
-        let etaMin = Int(pos.distance(from: cross.location) / 15.0)
-        let summary = "⏱️ \(cross.name) in \(etaMin) min – clear"
-        cross.lastStatus = summary
-        try? store.mainContext.save()
-        if summary != statusText { statusText = summary }
-        try? await publish(cross: cross, eta: etaMin, summary: summary)
-    }
-
-    private func publish(cross: Crossing, eta: Int, summary: String) async throws {
+    // MARK: - Live Activity
+    private func publishLiveActivity(name: String, eta: Int, summary: String) throws {
         let state = widgetAttributes.ContentState(minutes: eta, summary: summary)
-        if let activity = currentActivity {
-            await activity.update(ActivityContent(state: state, staleDate: .now + 15*60))
+
+        if let act = currentActivity {
+            Task { await act.update(ActivityContent(state: state, staleDate: .now + 15*60)) }
         } else {
-            let attr = widgetAttributes(crossingName: cross.name)
+            let attr = widgetAttributes(crossingName: name)
             currentActivity = try Activity.request(
                 attributes: attr,
-                content: ActivityContent(state: state, staleDate: .now + 15*60)
-            )
+                content: ActivityContent(state: state, staleDate: .now + 15*60))
         }
+    }
+
+    // ─────────────────────────────────────────
+    // Called by widgetController.startNow()
+    // ─────────────────────────────────────────
+    func manualTrigger(for dto: CommuteAPI.CrossingDTO, initial summary: String) async throws {
+        try publishLiveActivity(name: dto.name, eta: 0, summary: summary)
     }
 }
