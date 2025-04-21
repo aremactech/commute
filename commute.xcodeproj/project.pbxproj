@@ -78,6 +78,8 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				CommuteQuickStartWidget.swift,
+				LiveActivityManager.swift,
+				LocationManager.swift,
 				widgetAttributes.swift,
 			);
 			target = 285AF3E22DA58C2700E1A5FF /* commute */;

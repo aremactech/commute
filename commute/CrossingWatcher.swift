@@ -10,13 +10,15 @@ import CoreLocation
 import Combine
 import ActivityKit
 
+
 @MainActor
 final class CrossingWatcher: NSObject, ObservableObject, CLLocationManagerDelegate {
 
     static let shared = CrossingWatcher()
 
-    // Published summary for UI / widgets
+    // Published properties for UI updates
     @Published var currentSummary: String = "Locating…"
+    @Published var crossings: [CommuteAPI.CrossingDTO] = []
 
     private let loc = CLLocationManager()
     private var pollTimer: AnyCancellable?
@@ -29,7 +31,7 @@ final class CrossingWatcher: NSObject, ObservableObject, CLLocationManagerDelega
         loc.desiredAccuracy = kCLLocationAccuracyBest
         loc.startUpdatingLocation()
 
-        // Poll new API every 30 s while app is foreground
+        // Poll new API every 30 s while app is foreground
         pollTimer = Timer.publish(every: 30, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in self?.updateStatus() }
@@ -45,27 +47,33 @@ final class CrossingWatcher: NSObject, ObservableObject, CLLocationManagerDelega
         guard let here = loc.location else { return }
 
         Task {
-            guard let dto = try? await nearestCrossing(to: here) else { return }
+            do {
+                // Fetch all crossings
+                crossings = try await CommuteAPI.fetchCrossings()
+                
+                // Find nearest crossing
+                guard let dto = try await nearestCrossing(to: here) else { return }
 
-            // Convert API location to CoreLocation
-            let dtoCoord = CLLocation(latitude: dto.location.latitude,
-                                      longitude: dto.location.longitude)
+                // Convert API location to CoreLocation
+                let dtoCoord = CLLocation(latitude: dto.location.latitude,
+                                          longitude: dto.location.longitude)
 
-            let etaMin = Int(here.distance(from: dtoCoord) / 15.0)        // 15 m/s ≈ 34 mph
-            // CrossingStatus is an enum; use its rawValue text
-            let statusText = (dto.status as? (any RawRepresentable))?.rawValue as? String ?? "\(dto.status)"
-            let summary = "⏱️ \(dto.name) in \(etaMin) min – \(statusText.capitalized)"
+                let etaMin = Int(here.distance(from: dtoCoord) / 15.0)        // 15 m/s ≈ 34 mph
+                let statusText = dto.status.rawValue   // enum's raw String
+                let summary = "⏱️ \(dto.name) in \(etaMin) min – \(statusText.capitalized)"
 
-            await MainActor.run {
-                currentSummary = summary
-                try? publishLiveActivity(name: dto.name, eta: etaMin, summary: summary)
+                await MainActor.run {
+                    currentSummary = summary
+                    try? publishLiveActivity(name: dto.name, eta: etaMin, summary: summary)
+                }
+            } catch {
+                print("Error updating status: \(error)")
             }
         }
     }
 
     private func nearestCrossing(to pos: CLLocation) async throws -> CommuteAPI.CrossingDTO? {
-        let list = try await CommuteAPI.fetchCrossings()
-        return list.min {
+        return crossings.min {
             let a = CLLocation(latitude: $0.location.latitude, longitude: $0.location.longitude)
             let b = CLLocation(latitude: $1.location.latitude, longitude: $1.location.longitude)
             return pos.distance(from: a) < pos.distance(from: b)
